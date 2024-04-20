@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verificador de Inventario</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Inventario</title>
 </head>
 <body>
-  <h1>Verificador de Inventario</h1>
-  <form id="inventoryForm">
-    <label for="productCode">Código del Producto:</label><br>
-    <input type="text" id="productCode" name="productCode"><br>
-    <label for="quantity">Cantidad Solicitada:</label><br>
-    <input type="text" id="quantity" name="quantity"><br><br>
-    <button type="button" onclick="checkInventory()">Verificar Disponibilidad</button>
-  </form>
-  <div id="response"></div>
+    <h1>Verificador de Inventario</h1>
+    <form id="inventoryForm">
+        <label for="productCode">Código de Producto:</label>
+        <input type="text" id="productCode" name="productCode" required><br><br>
+        <label for="quantity">Cantidad:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required><br><br>
+        <input type="button" value="Enviar" onclick="checkInventory()">
+    </form>
 
-  <script>
-    function checkInventory() {
-      // Aquí se implementará la lógica para verificar la disponibilidad del producto
-    }
-  </script>
+    <script>
+        function checkInventory() {
+            var productCode = document.getElementById('productCode').value;
+            var quantity = parseInt(document.getElementById('quantity').value);
+
+            // Llama a la función en Google Sheets para verificar la disponibilidad del producto
+            google.script.run.withSuccessHandler(showResponse).verificarDisponibilidad(productCode, quantity);
+        }
+
+        function showResponse(response) {
+            if (response.available) {
+                alert("El producto está disponible: " + response.description);
+            } else {
+                alert("Consultar disponibilidad con su asesor.");
+            }
+        }
+    </script>
 </body>
 </html>
-
